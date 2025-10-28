@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro / Login</title>
+  <link rel="stylesheet" href="stylepr.css">
+</head>
+<body data-page="indexcadastro">
+  <div class="page-bg">
+
+    <!-- Header -->
+    <header class="brand">
+      <div class="brand-left">
+        <div class="brand-main">SESI<span class="sep">•</span>SENAI</div>
+        <div class="brand-sub">SÃO PAULO</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="center-screen">
+      <div class="card auth-card">
+        <h2>Cadastre-se</h2>
+
+        <!-- CADASTRO FORM -->
+        <form id="formCadastro" class="form-block">
+          <label class="label">
+            Nome
+            <input id="cadNome" class="input" type="text" placeholder="Nome completo" required>
+          </label>
+
+          <label class="label">
+            E-mail
+            <input id="cadEmail" class="input" type="email" placeholder="seu@exemplo.com" required>
+          </label>
+
+          <label class="label">
+            Senha
+            <input id="cadSenha" class="input" type="password" placeholder="senha" required>
+          </label>
+
+          <label class="label">
+            Tipo
+            <select id="cadTipo" class="input">
+              <option value="aluno">Aluno</option>
+              <option value="professor">Professor</option>
+            </select>
+          </label>
+
+          <div class="row">
+            <button type="button" id="btnCadastrar" class="btn gradient">Cadastrar</button>
+          </div>
+          <p id="msgCadastro" class="muted small">Cadastre um professor para acessar o painel do professor.</p>
+        </form>
+
+        <!-- LOGIN FORM (inicialmente escondido) -->
+        <form id="formLogin" class="form-block hidden">
+          <h2>Entrar</h2>
+
+          <label class="label">
+            E-mail
+            <input id="loginEmail" class="input" type="email" placeholder="seu@exemplo.com" required>
+          </label>
+
+          <label class="label">
+            Senha
+            <input id="loginSenha" class="input" type="password" placeholder="senha" required>
+          </label>
+
+          <label class="label small">
+            <input type="checkbox" id="loginIsProfessor"> Entrar como professor
+          </label>
+
+          <div class="row">
+            <button type="button" id="btnLogin" class="btn primary">Entrar</button>
+          </div>
+        </form>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="brand-small">
+        <div class="brand-main small">SESI<span class="sep">•</span>SENAI</div>
+        <div class="brand-sub">SÃO PAULO</div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnCadastrar = document.getElementById('btnCadastrar');
+      const formCadastro = document.getElementById('formCadastro');
+      const formLogin = document.getElementById('formLogin');
+
+      btnCadastrar.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // Aqui você poderia adicionar validação ou enviar para um backend
+        const tipo = document.getElementById('cadTipo').value;
+
+        // Esconder cadastro e mostrar login
+        formCadastro.classList.add('hidden');
+        formLogin.classList.remove('hidden');
+
+        // Ajustar título
+        formLogin.querySelector('h2').textContent = 'Cadastro concluído! Faça login';
+      });
+
+      const btnLogin = document.getElementById('btnLogin');
+      btnLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tipo = document.getElementById('cadTipo').value;
+
+        if (tipo === 'aluno') {
+          window.location.href = 'painel.html';
+        } else if (tipo === 'professor') {
+          window.location.href = 'painel_prof.html';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

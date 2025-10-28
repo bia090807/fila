@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Histórico Pessoal</title>
+  <link rel="stylesheet" href="stylepr.css" />
+</head>
+<body data-page="historico">
+  <div class="page-bg">
+    <header class="brand top-left">
+      <div class="brand-left small-block">
+        <div class="label">Aluno(a):</div>
+        <div id="userName" class="user-name">—</div>
+      </div>
+    </header>
+
+    <main class="main-panel">
+      <h1 class="panel-title">Histórico Pessoal</h1>
+
+      <section class="card history-card">
+        <table class="history-table">
+          <thead>
+            <tr><th>Data</th><th>Hora Saída</th><th>Hora Retorno</th><th>Tempo</th></tr>
+          </thead>
+          <tbody id="historyTableBody"></tbody>
+        </table>
+      </section>
+
+      <div class="center-actions margin-top">
+        <button id="voltarBtn" class="btn primary">Voltar ao Painel</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="scriptpro.js"></script>
+</body>
+</html>

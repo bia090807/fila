@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Confirmar Saída</title>
+  <link rel="stylesheet" href="stylepr.css">
+</head>
+<body>
+  <div class="page-bg center-screen">
+    <main class="card confirm-card">
+      <h2>Confirma sua saída?</h2>
+      <div class="muted small center">
+        Ao confirmar, sua saída será registrada e você aparecerá no topo da fila até confirmar retorno.
+      </div>
+      <div class="center-actions margin-top">
+        <button id="confirmSaidaBtn" class="btn gradient large">Confirmar Saída</button>
+        <button id="cancelSaida" class="btn outline large">Voltar</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Script de navegação -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnConfirmSaida = document.getElementById('confirmSaidaBtn');
+      const btnCancelar = document.getElementById('cancelSaida');
+
+      // Confirmar Saída → vai para confirmar_retorno.html
+      if (btnConfirmSaida) {
+        btnConfirmSaida.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.location.href = 'confirmar_retorno.html';
+        });
+      }
+
+      // Voltar → retorna ao painel.html
+      if (btnCancelar) {
+        btnCancelar.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.location.href = 'painel.html';
+        });
+      }
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>

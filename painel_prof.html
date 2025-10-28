@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema SESI•SENAI</title>
+<link rel="stylesheet" href="stylepr.css">
+</head>
+<body data-page="indexcadastro">
+
+<div class="page-bg">
+
+  <!-- =================== CADASTRO/LOGIN =================== -->
+  <main class="center-screen">
+    <div class="card auth-card" id="authCard">
+
+      <!-- CADASTRO -->
+      <form id="formCadastro" class="form-block">
+        <h2>Cadastre-se</h2>
+        <label class="label">Nome
+          <input id="cadNome" class="input" placeholder="Nome completo" required>
+        </label>
+        <label class="label">E-mail
+          <input id="cadEmail" class="input" type="email" placeholder="seu@exemplo.com" required>
+        </label>
+        <label class="label">Senha
+          <input id="cadSenha" class="input" type="password" placeholder="senha" required>
+        </label>
+        <label class="label">Tipo
+          <select id="cadTipo" class="input">
+            <option value="aluno">Aluno</option>
+            <option value="professor">Professor</option>
+          </select>
+        </label>
+        <div class="row">
+          <button type="button" id="btnCadastrar" class="btn gradient">Cadastrar</button>
+        </div>
+      </form>
+
+      <!-- LOGIN -->
+      <form id="formLogin" class="form-block hidden">
+        <h2>Entrar</h2>
+        <label class="label">E-mail
+          <input id="loginEmail" class="input" type="email" placeholder="seu@exemplo.com" required>
+        </label>
+        <label class="label">Senha
+          <input id="loginSenha" class="input" type="password" placeholder="senha" required>
+        </label>
+        <label class="label small">
+          <input type="checkbox" id="loginIsProfessor"> Entrar como professor
+        </label>
+        <div class="row">
+          <button type="button" id="btnLogin" class="btn primary">Entrar</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- =================== PAINEL DO PROFESSOR =================== -->
+  <div id="painelProf" class="hidden">
+    <header class="brand top-left">
+      <div class="brand-left small-block">
+        <div class="label">Professor(a):</div>
+        <div id="profName" class="user-name">—</div>
+      </div>
+      <div class="right-actions">
+        <button id="btnAtualizar" class="btn small">Atualizar lista</button>
+        <button id="btnPainelRapido" class="btn small outline">Painel rápido</button>
+        <button id="btnSairProf" class="btn small danger">Sair</button>
+      </div>
+    </header>
+    <main class="main-panel">
+      <h1 class="panel-title">Painel do Professor</h1>
+      <section class="card control-card">
+        <h3>Alunos (status de saída)</h3>
+        <table class="alunos-table">
+          <thead><tr><th>Aluno</th><th>Hora Saída</th><th>Tempo Fora</th><th>Data</th></tr></thead>
+          <tbody id="profTable"></tbody>
+        </table>
+        <div class="center-actions margin-top">
+          <button id="forcarLib" class="btn outline">Forçar Liberação (todos)</button>
+          <button id="resetFila" class="btn outline">Resetar Fila & Histórico</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer small-footer">
+      <div class="brand-small">
+        <div class="brand-main small">SESI<span class="sep">•</span>SENAI</div>
+      </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="alertModal" class="modal hidden" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-icon">⚠️</div>
+        <div id="modalText" class="modal-text">ALERTA</div>
+        <div class="modal-actions">
+          <button id="verDetalhes" class="btn outline">Painel rápido</button>
+          <button id="forcarRetorno" class="btn danger">Forçar Retorno (aluno)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================== PAINEL RÁPIDO =================== -->
+  <div id="painelRapido" class="hidden page-bg center-screen">
+    <main class="card quick-card">
+      <h2>Painel Rápido</h2>
+      <div class="big-box">
+        <div class="highlight" id="countOutside">0 Alunos Fora</div>
+        <div class="muted small" id="countWaiting">0 Aguardando</div>
+        <div class="muted small" id="earliestOutside">—</div>
+        <div class="center-actions margin-top">
+          <button id="verDetalhesQuick" class="btn primary">Ver detalhes (painel)</button>
+          <button id="voltarPainel" class="btn outline">Voltar</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // =================== Variáveis ===================
+  const formCadastro = document.getElementById('formCadastro');
+  const formLogin = document.getElementById('formLogin');
+  const btnCadastrar = document.getElementById('btnCadastrar');
+  const btnLogin = document.getElementById('btnLogin');
+  const authCard = document.getElementById('authCard');
+
+  const painelProf = document.getElementById('painelProf');
+  const profName = document.getElementById('profName');
+  const profTable = document.getElementById('profTable');
+
+  const btnAtualizar = document.getElementById('btnAtualizar');
+  const btnPainelRapido = document.getElementById('btnPainelRapido');
+  const btnSairProf = document.getElementById('btnSairProf');
+  const btnForcarLib = document.getElementById('forcarLib');
+  const btnResetFila = document.getElementById('resetFila');
+
+  const alertModal = document.getElementById('alertModal');
+  const btnVerDetalhes = document.getElementById('verDetalhes');
+  const btnForcarRetorno = document.getElementById('forcarRetorno');
+
+  const painelRapido = document.getElementById('painelRapido');
+  const countOutside = document.getElementById('countOutside');
+  const countWaiting = document.getElementById('countWaiting');
+  const earliestOutside = document.getElementById('earliestOutside');
+  const verDetalhesQuick = document.getElementById('verDetalhesQuick');
+  const voltarPainel = document.getElementById('voltarPainel');
+
+  // =================== Cadastro ===================
+  btnCadastrar.addEventListener('click', () => {
+    const nome = document.getElementById('cadNome').value;
+    const email = document.getElementById('cadEmail').value;
+    const senha = document.getElementById('cadSenha').value;
+    const tipo = document.getElementById('cadTipo').value;
+
+    if(!nome || !email || !senha) {
+      alert('Preencha todos os campos!');
+      return;
+    }
+
+    // Salvar dados simples (localStorage)
+    localStorage.setItem('user', JSON.stringify({nome, email, senha, tipo}));
+
+    alert('Cadastro concluído! Agora faça login.');
+    formCadastro.classList.add('hidden');
+    formLogin.classList.remove('hidden');
+  });
+
+  // =================== Login ===================
+  btnLogin.addEventListener('click', () => {
+    const email = document.getElementById('loginEmail').value;
+    const senha = document.getElementById('loginSenha').value;
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if(!user || user.email !== email || user.senha !== senha) {
+      alert('E-mail ou senha incorretos!');
+      return;
+    }
+
+    authCard.classList.add('hidden');
+
+    if(user.tipo === 'professor') {
+      painelProf.classList.remove('hidden');
+      profName.textContent = user.nome;
+    } else {
+      alert('Painel de aluno não implementado.');
+    }
+  });
+
+  // =================== Tabela de alunos ===================
+  let alunos = [
+    {nome:'João', saida:'10:30', tempo:'15 min', data:'09/10/2025'},
+    {nome:'Ana', saida:'10:45', tempo:'10 min', data:'09/10/2025'}
+  ];
+
+  function atualizarTabela() {
+    profTable.innerHTML = '';
+    alunos.forEach(a => {
+      const row = document.createElement('tr');
+      row.innerHTML = `<td>${a.nome}</td><td>${a.saida}</td><td>${a.tempo}</td><td>${a.data}</td>`;
+      profTable.appendChild(row);
+    });
+    // Atualizar painel rápido
+    countOutside.textContent = `${alunos.length} Alunos Fora`;
+    countWaiting.textContent = `0 Aguardando`;
+    earliestOutside.textContent = alunos[0]?.saida || '—';
+  }
+
+  btnAtualizar.addEventListener('click', atualizarTabela);
+  btnForcarLib.addEventListener('click', () => { alert('Todos liberados'); });
+  btnResetFila.addEventListener('click', () => { alunos=[]; atualizarTabela(); alert('Fila resetada'); });
+
+  btnSairProf.addEventListener('click', () => {
+    painelProf.classList.add('hidden');
+    authCard.classList.remove('hidden');
+  });
+
+  btnPainelRapido.addEventListener('click', () => {
+    painelRapido.classList.remove('hidden');
+    painelProf.classList.add('hidden');
+  });
+
+  voltarPainel.addEventListener('click', () => {
+    painelRapido.classList.add('hidden');
+    painelProf.classList.remove('hidden');
+  });
+
+  verDetalhesQuick.addEventListener('click', () => {
+    painelRapido.classList.add('hidden');
+    painelProf.classList.remove('hidden');
+  });
+
+  // Inicializa tabela
+  atualizarTabela();
+});
+</script>
+
+</body>
+</html>

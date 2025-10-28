@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Painel do Aluno</title>
+  <link rel="stylesheet" href="stylepr.css" />
+</head>
+<body>
+  <div class="page-bg">
+    <header class="brand top-left">
+      <div class="brand-left small-block">
+        <svg class="user-sm" viewBox="0 0 24 24" width="36" height="36" aria-hidden>
+          <circle cx="12" cy="8" r="3" stroke="#C9C4FF" stroke-width="1.6" fill="none"/>
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="#E6DFEF" stroke-width="1.6" fill="none"/>
+        </svg>
+        <div class="user-info">
+          <div class="label">Aluno(a):</div>
+          <div id="userName" class="user-name">Alice Santos</div>
+        </div>
+      </div>
+
+      <button id="homeBtn" class="icon-round" title="Sair">⤴</button>
+    </header>
+
+    <main class="main-panel">
+      <h1 class="panel-title">Painel do Aluno</h1>
+
+      <!-- Status do Banheiro -->
+      <section class="card status-card">
+        <div class="status-top">
+          <div class="left"><strong>Status do Banheiro</strong></div>
+          <div class="right">
+            <div class="toilet-ico">🚻</div>
+            <div id="bathStatus" class="status-text unavailable">Indisponível</div>
+          </div>
+        </div>
+
+        <div class="center-actions">
+          <button id="solicitButton" class="btn outline">Solicitar Saída</button>
+        </div>
+      </section>
+
+      <!-- Fila -->
+      <section class="card queue-card">
+        <h3>Sua Posição <span id="posicao" class="pos-figure">—</span></h3>
+        <div class="queue-grid">
+          <div class="col">
+            <div class="q-item">Marcos</div>
+            <div class="q-item">Matheus</div>
+            <div class="q-item highlight">Alice</div>
+          </div>
+          <div class="col">
+            <div class="q-item">Sofia</div>
+            <div class="q-item">Clara</div>
+            <div class="q-item">Diego</div>
+          </div>
+          <div class="col-actions">
+            <button id="cancelRequest" class="btn tiny">Cancelar Solicitação</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Histórico -->
+      <section class="card history-card">
+        <h3>Histórico Pessoal</h3>
+        <table class="history-table">
+          <thead><tr><th>Data</th><th>Hora Saída</th><th>Hora Retorno</th><th>Tempo</th></tr></thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </section>
+
+      <!-- Botões de confirmação -->
+      <div class="center-actions margin-top">
+        <button id="confirmExit" class="btn gradient">Confirmar Saída</button>
+        <button id="btnRetorno" class="btn gradient">Confirmar Retorno</button>
+        <button onclick="window.location.href='historico.html'" class="btn outline">Ver Histórico</button>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="brand-small">
+        <div class="brand-main small">SESI<span class="sep">•</span>SENAI</div>
+        <div class="brand-sub">SÃO PAULO</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Script de navegação -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnSair = document.getElementById('homeBtn');
+      const btnSolicitar = document.getElementById('solicitButton');
+      const btnConfirmExit = document.getElementById('confirmExit');
+      const btnRetorno = document.getElementById('btnRetorno');
+
+      // Botão de sair → volta ao login/cadastro
+      if (btnSair) {
+        btnSair.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.location.href = 'index.html';
+        });
+      }
+
+      // Botão "Solicitar Saída" → vai para confirmar_saida.html
+      if (btnSolicitar) {
+        btnSolicitar.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.location.href = 'confirmar_saida.html';
+        });
+      }
+
+      // Botão "Confirmar Saída" → vai para confirmar_saida.html
+      if (btnConfirmExit) {
+        btnConfirmExit.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.location.href = 'confirmar_saida.html';
+        });
+      }
+
+      // Botão "Confirmar Retorno" → vai para confirmar_retorno.html
+      if (btnRetorno) {
+        btnRetorno.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.location.href = 'confirmar_retorno.html';
+        });
+      }
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>

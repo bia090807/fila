@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Histórico Pessoal</title>
+  <link rel="stylesheet" href="stylepr.css" />
+</head>
+<body>
+  <div class="page-bg">
+    <header class="brand top-left">
+      <div class="brand-left small-block">
+        <svg class="user-sm" viewBox="0 0 24 24" width="36" height="36" aria-hidden>
+          <circle cx="12" cy="8" r="3" stroke="#C9C4FF" stroke-width="1.6" fill="none"/>
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="#E6DFEF" stroke-width="1.6" fill="none"/>
+        </svg>
+        <div class="user-info">
+          <div class="label">Aluno(a):</div>
+          <div id="userName" class="user-name">—</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-panel">
+      <h1 class="panel-title">Histórico Pessoal</h1>
+
+      <section class="card history-card">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Hora Saída</th>
+              <th>Hora Retorno</th>
+              <th>Tempo</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </section>
+
+      <div class="center-actions margin-top">
+        <button id="voltarBtn" class="btn primary">Voltar ao Painel</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Exibe nome do aluno
+    const nome = localStorage.getItem("alunoNome");
+    const userNameEl = document.getElementById("userName");
+    if (userNameEl && nome) {
+      userNameEl.textContent = nome;
+    }
+
+    // Carrega histórico
+    const historyBody = document.getElementById("historyBody");
+    const historico = JSON.parse(localStorage.getItem("historico") || "[]");
+    historyBody.innerHTML = "";
+
+    historico.forEach((registro) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${registro.data}</td>
+        <td>${registro.horaSaida}</td>
+        <td>${registro.horaRetorno}</td>
+        <td>${registro.tempo}</td>
+      `;
+      historyBody.appendChild(row);
+    });
+
+    // Botão voltar ao painel
+    document.getElementById("voltarBtn").addEventListener("click", () => {
+      window.location.href = "painel.html";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Retorno Confirmado</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-bg center-screen">
+    <main class="card final-card">
+      <h2>Retorno confirmado</h2>
+      <p class="muted">Tempo total registrado. Sua posição foi removida da fila.</p>
+      <div id="finalInfo" class="muted small" style="margin-top:6px;"></div>
+      <div class="center-actions margin-top">
+        <button id="finalOk" class="btn primary large">Voltar ao início</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Mostra tempo total registrado
+    const finalInfo = document.getElementById("finalInfo");
+    if (finalInfo) {
+      const tempo = localStorage.getItem("tempoTotal") || "0";
+      finalInfo.textContent = `Tempo total: ${tempo} minutos.`;
+
+      // Adiciona ao histórico
+      const history = JSON.parse(localStorage.getItem("historico") || "[]");
+      const saida = new Date(localStorage.getItem("horaSaida"));
+      const retorno = new Date(localStorage.getItem("horaRetorno"));
+
+      const novoRegistro = {
+        data: saida.toLocaleDateString(),
+        horaSaida: saida.toLocaleTimeString(),
+        horaRetorno: retorno.toLocaleTimeString(),
+        tempo: tempo + " min",
+      };
+
+      history.push(novoRegistro);
+      localStorage.setItem("historico", JSON.stringify(history));
+    }
+
+    // Botão "Voltar ao início" → limpa e vai para index.html
+    const finalOkBtn = document.getElementById("finalOk");
+    if (finalOkBtn) {
+      finalOkBtn.addEventListener("click", () => {
+        localStorage.removeItem("horaSaida");
+        localStorage.removeItem("horaRetorno");
+        localStorage.removeItem("tempoTotal");
+        localStorage.removeItem("alunoNome");
+        window.location.href = "index.html";
+      });
+    }
+  </script>
+</body>
+</html>
